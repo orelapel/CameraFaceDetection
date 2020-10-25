@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CameraFaceDetection</string>
+    <string name="start">start</string>
+    <string name="enter_d">d</string>
+    <string name="enter_c">c</string>
+    <string name="enter_k3">k3</string>
+    <string name="enter_k2">k2</string>
+    <string name="enter_k1">k1</string>
+    <string name="detect_face">Detect Face</string>
+    <string name="clip">clip</string>
+    <string name="take_pic">take picture</string>
+    <string name="event_cam">event camera</string>
+    <string name="connect">connect</string>
+    <string name="disconnect">disconnect</string>
+    <string name="front">front cam</string>
+    <string name="back">back cam</string>
+</resources>
