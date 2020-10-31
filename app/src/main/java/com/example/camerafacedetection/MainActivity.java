@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,8 +84,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cameraView.start();
-                cameraView.captureImage();
-                graphicOverlay.clear();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cameraView.captureImage();
+                        handler.postDelayed(this, 1);
+                    }
+                }, 0);  //the time is in miliseconds
+//                graphicOverlay.clear();
             }
         });
 
@@ -101,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onImage(CameraKitImage cameraKitImage) {
-                alertDialog.show();
+                //alertDialog.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap = Bitmap.createScaledBitmap(bitmap, cameraView.getWidth(),
                         cameraView.getHeight(), false);
-                cameraView.stop();
+                //cameraView.stop();
 
                 processFaceDetection(bitmap);
             }
@@ -119,12 +127,13 @@ public class MainActivity extends AppCompatActivity {
         //faceDetectButton.setEnabled(true);
     }
 
-
     private void processFaceDetection(Bitmap bitmap) {
         FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
 
         FirebaseVisionFaceDetectorOptions firebaseVisionFaceDetectorOptions
-                = new FirebaseVisionFaceDetectorOptions.Builder().build();
+                = new FirebaseVisionFaceDetectorOptions.Builder()
+                .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                .enableTracking().build();
 
         FirebaseVisionFaceDetector firebaseVisionFaceDetector = FirebaseVision.getInstance()
                 .getVisionFaceDetector(firebaseVisionFaceDetectorOptions);
@@ -149,9 +158,11 @@ public class MainActivity extends AppCompatActivity {
             Rect rect = face.getBoundingBox();
             RectOverlay rectOverlay = new RectOverlay(graphicOverlay, rect);
 
+            graphicOverlay.clear();
             graphicOverlay.add(rectOverlay);
             midRectFace = new Point(rect.width()/2, rect.height()/2);
             L = rect.width() * rect.height();
+            //sendValues(k1ToDouble, k2ToDouble, k3ToDouble, cToDouble, dToDouble);
 
             counter += 1;
         }
@@ -209,8 +220,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        double a, b, l, e;
+        sendValues(k1ToDouble, k2ToDouble, k3ToDouble, cToDouble, dToDouble);
+    }
 
+    public void sendValues(double k1,double k2,double k3, double c, double d) {
+        double a, b, l, e;
         deltaX = midFrameCam.x - midRectFace.x;
         if (deltaX < 0) {
             deltaX = -deltaX;
@@ -229,10 +243,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Calculate values and send them to serial
-            a = deltaX * k1ToDouble * cToDouble;
-            b = deltaY * k2ToDouble;
-            l = (L - dToDouble) * k3ToDouble;
-            e = (deltaX * k1ToDouble) * (1 - cToDouble);
+            a = deltaX * k1 * c;
+            b = deltaY * k2;
+            l = (L - d) * k3;
+            e = (deltaX * k1) * (1 - c);
             String s1 = "cw," + a + ",", s2 = "r," + e + ",", s3 = "fw," + l + ",", s4 = "U," + b + ",";
             Toast toast = Toast.makeText(getApplicationContext(),
                     s1 + " " + s2 + " " + s3 + " " + s4, Toast.LENGTH_SHORT);
