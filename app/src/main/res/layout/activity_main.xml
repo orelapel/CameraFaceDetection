@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:keepScreenOn="true"
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
@@ -13,42 +15,58 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="30dp"
-        android:paddingBottom="30dp"
+        android:paddingBottom="0dp"
         android:orientation="vertical" >
         <RelativeLayout android:id="@+id/RelativeLayout01"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <com.wonderkiln.camerakit.CameraView
-                android:id="@+id/camera_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/event_cam"
-                android:layout_above="@+id/k3"
-                >
-            </com.wonderkiln.camerakit.CameraView>
+<!--            <com.wonderkiln.camerakit.CameraView-->
+<!--                android:id="@+id/camera_view"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:layout_below="@id/event_cam"-->
+<!--                android:layout_above="@+id/k3"-->
+<!--                >-->
+<!--            </com.wonderkiln.camerakit.CameraView>-->
 
-            <com.example.camerafacedetection.Helper.GraphicOverlay
-                android:id="@+id/graphic_overlay"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/event_cam"
-                android:layout_above="@+id/k3"
-                />
+<!--            <com.example.camerafacedetection.Helper.GraphicOverlay-->
+<!--                android:id="@+id/graphic_overlay"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:layout_below="@id/event_cam"-->
+<!--                android:layout_above="@+id/k3"-->
+<!--                />-->
 
-            <Button
-                android:id="@+id/detect_face_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:enabled="true"
-                android:text="@string/detect_face"
-                />
+<!--            <Button-->
+<!--                android:id="@+id/detect_face_btn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentLeft="true"-->
+<!--                android:enabled="true"-->
+<!--                android:text="@string/detect_face"-->
+<!--                />-->
+
+            <com.example.camerafacedetection.CameraSourcePreview
+                android:id="@+id/firePreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/k3">
+
+                <com.example.camerafacedetection.Helper.GraphicOverlay
+                    android:id="@+id/fireFaceOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true" />
+            </com.example.camerafacedetection.CameraSourcePreview>
             <Button
                 android:id="@+id/change_cam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/detect_face_btn"
                 android:enabled="true"
                 android:onClick="OnClickChangeCam"
                 android:text="@string/front"
