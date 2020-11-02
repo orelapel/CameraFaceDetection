@@ -20,31 +20,6 @@
         <RelativeLayout android:id="@+id/RelativeLayout01"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-<!--            <com.wonderkiln.camerakit.CameraView-->
-<!--                android:id="@+id/camera_view"-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent"-->
-<!--                android:layout_below="@id/event_cam"-->
-<!--                android:layout_above="@+id/k3"-->
-<!--                >-->
-<!--            </com.wonderkiln.camerakit.CameraView>-->
-
-<!--            <com.example.camerafacedetection.Helper.GraphicOverlay-->
-<!--                android:id="@+id/graphic_overlay"-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent"-->
-<!--                android:layout_below="@id/event_cam"-->
-<!--                android:layout_above="@+id/k3"-->
-<!--                />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/detect_face_btn"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentLeft="true"-->
-<!--                android:enabled="true"-->
-<!--                android:text="@string/detect_face"-->
-<!--                />-->
 
             <com.example.camerafacedetection.CameraSourcePreview
                 android:id="@+id/firePreview"
