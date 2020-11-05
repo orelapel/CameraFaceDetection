@@ -2,7 +2,6 @@ package com.example.camerafacedetection;
 
 import androidx.annotation.NonNull;
 
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
 
@@ -28,7 +27,7 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
     private final FirebaseVisionFaceDetector detector;
 
     private PointF midRect;
-    private double area;
+    private double edge;
 
     public FaceDetectionProcessor() {
         FirebaseVisionFaceDetectorOptions options =
@@ -61,7 +60,7 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
             @NonNull GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
         if (faces.size() == 0) {
-            area = 0;
+            edge = 0;
         }
         for (int i = 0; i < faces.size(); ++i) {
             FirebaseVisionFace face = faces.get(i);
@@ -70,7 +69,7 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
 
             midRect = faceGraphic.getMidRect();
-            area = faceGraphic.getArea();
+            edge = faceGraphic.getEdge();
         }
     }
 
@@ -78,13 +77,13 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
         return midRect;
     }
 
-    public double getArea() {
-        return area;
+    public double getEdge() {
+        return edge;
     }
 
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Face detection failed " + e);
-        area = 0;
+        edge = 0;
     }
 }

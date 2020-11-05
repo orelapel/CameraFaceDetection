@@ -89,6 +89,9 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         float right = x + xOffset;
         float bottom = y + yOffset;
         canvas.drawRect(left, top, right, bottom, boxPaint);
+
+        canvas.drawText("edge: " + roundAvoid(right-left,2),
+                left + ID_X_OFFSET, bottom + ID_Y_OFFSET, idPaint);
     }
 
     public static double roundAvoid(double value, int places) {
@@ -102,16 +105,12 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         return new PointF(x,y);
     }
 
-    public double getArea() {
+    public double getEdge() {
         float x = translateX(firebaseVisionFace.getBoundingBox().centerX());
-        float y = translateY(firebaseVisionFace.getBoundingBox().centerY());
 
         float xOffset = scaleX(firebaseVisionFace.getBoundingBox().width() / 2.0f);
-        float yOffset = scaleY(firebaseVisionFace.getBoundingBox().height() / 2.0f);
         float left = x - xOffset;
-        float top = y - yOffset;
         float right = x + xOffset;
-        float bottom = y + yOffset;
-        return (right - left) * (bottom - top);
+        return (right - left);
     }
 }

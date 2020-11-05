@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Button startButton;
     private Button changeButton;
     boolean shouldStop=false;
+    boolean recognized = true;
 
     private static final int PERMISSION_REQUESTS = 1;
     private static final String TAG = "LivePreviewActivity";
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
     private FaceDetectionProcessor faceDetectionProcessor;
+    final Handler handler = new Handler();
 
     double deltaX;
     double deltaY;
@@ -171,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
         midFrameCam = new PointF((float) (preview.getWidth()/2.0), (float) (preview.getHeight()/2.0));
 
         // Repeating send values to serial every 1000 millis.
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 if (!shouldStop) {
@@ -180,43 +181,50 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(this, 1000);
                 }
             }
-        }, 0);  //the time is in miliseconds
+        };
+        Thread thread = new Thread(r);
+        thread.start();
     }
 
     public void sendValues(double k1,double k2,double k3, double c, double d) {
-        double a, b, l, e;
+        final double a, b, l, e;
 
-        // Get the middle point of the rectangle face and the size of this rectangle.
+        // Get the middle point of the rectangle face and the edge of this rectangle.
         midRectFace = faceDetectionProcessor.getMidRect();
-        L = faceDetectionProcessor.getArea();
+        L = faceDetectionProcessor.getEdge();
 
         // If the size of the rectangle is 0 - the face did'nt recognized yet.
-        if (L == 0) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "face did'nt recognized yet", Toast.LENGTH_SHORT);
-            toast.show();
+        if (L == 0 && recognized) {
+            recognized = false;
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(MainActivity.this,
+                            "face did'nt recognized yet",Toast.LENGTH_LONG).show();
+                }
+            });
             return;
         }
+        else if (L==0) {
+            return;
+        }
+        recognized = true;
 
-        // Calculate the Absolute values of deltaX and deltaY.
+        // Calculate the values of deltaX and deltaY.
         deltaX = midFrameCam.x - midRectFace.x;
-        if (deltaX < 0) {
-            deltaX = -deltaX;
-        }
         deltaY = midFrameCam.y - midRectFace.y;
-        if (deltaY < 0) {
-            deltaY = -deltaY;
-        }
 
         // Calculate values and send them to serial
         a = roundAvoid(deltaX * k1 * c,2);
         b = roundAvoid(deltaY * k2,2);
         l = roundAvoid((L - d) * k3,2);
         e = roundAvoid((deltaX * k1) * (1 - c),2);
-        String s1 = "cw," + a + ",", s2 = "r," + e + ",", s3 = "fw," + l + ",", s4 = "U," + b + ",";
-        Toast toast = Toast.makeText(getApplicationContext(),
-                s1 + " " + s2 + " " + s3 + " " + s4, Toast.LENGTH_SHORT);
-        toast.show();
+        final String s1 = "cw," + a + ",", s2 = "r," + e + ",", s3 = "fw," + l + ",", s4 = "U," + b + ",";
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(MainActivity.this,
+                        s1 + " " + s2 + " " + s3 + " " + s4,Toast.LENGTH_LONG).show();
+            }
+        });
         try {
             port.write(s1.getBytes(), 10);
             port.write(s2.getBytes(), 10);

@@ -83,7 +83,7 @@
                 android:hint="@string/enter_k1"
                 android:layout_toLeftOf="@+id/k2"
                 android:layout_above="@+id/send"
-                android:inputType="number"/>
+                android:inputType="numberSigned|numberDecimal"/>
             <EditText
                 android:id="@+id/k2"
                 android:layout_width="60dp"
@@ -91,7 +91,7 @@
                 android:hint="@string/enter_k2"
                 android:layout_above="@+id/send"
                 android:layout_toLeftOf="@+id/k3"
-                android:inputType="number"/>
+                android:inputType="numberSigned|numberDecimal"/>
             <EditText
                 android:id="@+id/k3"
                 android:layout_width="60dp"
@@ -99,7 +99,7 @@
                 android:hint="@string/enter_k3"
                 android:layout_above="@+id/send"
                 android:layout_centerHorizontal="true"
-                android:inputType="number"/>
+                android:inputType="numberSigned|numberDecimal"/>
             <EditText
                 android:id="@+id/c"
                 android:layout_width="60dp"
@@ -107,7 +107,7 @@
                 android:hint="@string/enter_c"
                 android:layout_above="@+id/send"
                 android:layout_toRightOf="@+id/k3"
-                android:inputType="number" />
+                android:inputType="numberSigned|numberDecimal" />
             <EditText
                 android:id="@+id/d"
                 android:layout_width="60dp"
@@ -115,7 +115,7 @@
                 android:hint="@string/enter_d"
                 android:layout_above="@+id/send"
                 android:layout_toRightOf="@+id/c"
-                android:inputType="number"/>
+                android:inputType="numberSigned|numberDecimal"/>
             <Button
                 android:id="@+id/send"
                 android:layout_width="wrap_content"
